@@ -1,0 +1,63 @@
+-a description of your algorithms and data structures
+
+	I used one hash table. It is a vector that has a max size, indicated in the constructor as maxBuckets. Each vector is associated with a persons name. Each element in the vector is a vector of Info. When a new user is added to the hash table, it goes to the index and adds itself in the inner vector with its user name and chat name specified. If there is more than 1 person is in the same index of outer vector, it then puts both of them in the same bucket. The usersWhoLeft is a vector of Info. 
+	Every time a person is being looked up, it does so by using a bucket. And every time a chat is being looked up, it iterates through the inner vector to find desired chat. I used this algorithm because it was straightforward, and very easy to understand. 
+
+-Pseudocode
+	void join 
+		initialize hash value from string user 
+		initialize bucket value by diving above by maxBuckets
+		if bucket is empty 
+			insert Info and return 
+		if bucket is not empty 
+			iterate inside the bucket 
+				if theres already a same Info 
+					erase that one and insert a new one and return 
+			insert info 
+
+	void terminate 
+		set total as 0 
+			iterate through buckets 
+			if the bucket is not empty 
+				iterate through the bucket 
+					if theres chat that we are looking for 
+						add count to total 
+						delete chat 
+			iterate through usersWhoLeft
+				if that chat is what we look for 
+				add count to total and erase the user 
+		return total 
+
+	int contribute 
+		initialize hash value from string user 
+		initialize bucket value 
+		if the buckets not empty
+			iterate through the bucket 
+				if theres user that we are looking for 
+					add 1 to count 
+					return count 
+		return zero 
+
+	int leave
+		initialize hash value from string user 
+		initialize bucket value 
+		iterate through the bucket 
+			if the user and chat is same 
+				get its count 
+				add it to usersWhoLeft, and erase it from the bucket 
+				return the count 
+		return -1
+
+	int leave(user)
+		initialize hash value from string user 
+		initialize bucket value 
+		iterate through the bucket 
+			if the user is same 
+				get its count 
+				add it to usersWhoLeft, and erase it from the bucket 
+				return the count 
+		return -1
+		
+
+
+			

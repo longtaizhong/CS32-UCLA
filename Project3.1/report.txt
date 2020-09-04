@@ -1,0 +1,329 @@
+- The name of your recursive goblin movement function and the name of the file it's implemented in, or else a statement that your goblin movement function is not recursive. (Make this the first thing, to help the grader find the function.)
+
+Recursive Goblin Function:
+	int Dungeon::goblinStep(Actor* goblin, int sr, int sc)
+in Dungeon.cpp
+It is called in 
+	void Dungeon:: moveMonsters()
+
+
+-a description of the design of your program. For each of your classes, indicate its purpose, what behaviors it implements, and how it relates to other classes.
+
+[Actor]
+	The purpose of Actor class is to keep necessary information that all actors have in common. The player class derived from actor will be controlled by the User in Dungeon class. The monsters derived from actor class will be stored in a vector in Dungeon class and move when necessary. They also contain GameObject class pointer, their weapon. 
+	Actor contains getters and setters that control their positions, name, stats, weapon, and sleep status. Actor is base class for Player, SnakeWoman, BogeyMan, Dragon, and Goblin. 
+
+[GameObjects]
+	The purpose of GameObject class is to keep data of objects used in the game that can be picked up or dropped. The class can be spawned in the Dungeon, or be picked up and used by player, or be dropped from monsters. 
+	GameObjects class contains contains all the weapons, scroll, Staircase and golden idol. They have stats, action string, and bool to determine if they are troll or not. 
+
+[globals]
+	contains constants such as Row numbers and Column numbers. 
+[Game]
+	The game class contains member variable Dungeon and takes in character from GetCharacter to cause different responses in the Dungeon class. When theres sign from Dungeon class to terminate the game, it does so. 
+
+[Dungeon]
+	Dungeon class is responsible for the all the movements and actions in the game. It contains two different character two dimensional Arrays, BaseGrid and Maze. It also contains class pointer m_player, m_staircase, m_goldenIdol, and vector of GameObjects pointer called glist and inventory. It also contains vector of actors called m_monsters. It contains vectors of string called m_msgs and m_goblinDir. The Dungeon is also responsible for keeping track of levels. 
+	Generate() function first creates a 2 dimensional array filled with walls, and randomly select rectangles and excavate the walls and make them into empty characters. Then the maze is made by copying the BaseGrid. The Basegrid will only contain walls and spaces, and maze will contain different objects on top of the walls and spaces. It then assign a players, items and monsters positions so that they will be spawned on empty characters in maze. It then assigns positions in staircase or golden idol depending on level. The monsters and Items are stored in vector and they are access by identifying which index of object in the vector is interacting with the other. 
+	The display function then reflects the positions of different objects on the actual maze and print them. It also prints the stats of player and the level. 
+	During the game, it takes in different char from the Game class and changes screen accordingly. 
+
+
+-documentation of non-trivial algorithms. Use pseudocode where it helps clarify the presentation. 
+
+Dungeon Constructor 
+	set player to null 
+	set pickup to false 
+	set run to true 
+	set staircase to null 
+	set goldenidol to null 
+
+
+void Dungeon:: generate()
+//not pseudocode 
+	fill 2d array baseGrid with #
+	Create five random rectangles within the 2s array and set them to empty space
+	create corridors among the rectangles and set them to empty space 
+	Set player position by randomly going through the 2d array until it finds an empty space 
+	Set item positions by same method
+	create monsters and Set monster positions that will be in Dungeon by same method 
+	set staircase positions by same method 
+
+
+void Dungeon:: display()
+//not pseudocode 
+	set the 2d array characters accordingly based on the positions of player, 
+	monsters, and game objects that were made in generate() function
+	print the grid 
+	print the stats
+
+void Dungeon:: addMonsters()
+//Is pseudocode 
+	decide number of monsters randomly 
+	for number of monsters 
+		set placed to false 
+			while placed is false 
+				r is random row 
+				c is random col 
+				if theres nothing but game objects on r, c
+					set mons to 0 
+					if level is 0 
+						mons is 0 or 1 
+					if level is 1 
+						mons is 0 or 1 
+					if level is 2 
+						mons is 0, 1, or 2
+					if level is 3 or higher 
+						mons is 0, 1, 2 or 3
+					a is nullptr 
+						if mons is 0 
+							set a to goblin with location r, c 
+						if mons is 1 
+							set a to snake woman with location r, c
+						if mons is 2 
+							set a to bogeyman with location r, c
+						if mons is 3 
+							set a to dragon with location r, c
+				add a to monster vector 
+
+void Dungeon:: moveCharacters(char c)
+//is pseudocode 
+	msg is empty string 
+	int 
+	if player is not asleep 
+		if arrow up 
+			if theres mons at up coordinate 
+				attack
+				add msg to msg vector 
+			else if up coordinate can be moved to 
+				set player position to up 
+		if arrow down 
+			if theres mons at down coordinate 
+				attack
+				add msg to msg vector 
+			else if up coordinate can be moved to 
+				set player position to down 
+		if arrow right 
+			if theres mons at right coordinate 
+				attack
+				add msg to msg vector 
+			else if up coordinate can be moved to 
+				set player position to right 
+		if arrow left 
+			if theres mons at up coordinate 
+				attack
+				add msg to msg vector 
+			else if up coordinate can be moved to 
+				set player position to left
+
+		
+	else if the player is asleep 
+		decrease the sleeping turn of the player 
+		if the sleeping turn of player is 0 
+			wake up the player 
+
+void Dungeon:: moveMonsters(){
+	//is pseudocode 
+	msg is empty string 
+	for monster size 
+		if the monster is goblin 
+			if its not next to player 
+				if stepsize is less than 15
+					if first step it takes is right 
+						set location to right 
+					if first step is left 
+						set location to left 
+					if first step is up 
+						set location to up 
+					if first step is down 
+						set location is down 
+				erase goblinDir 
+			if its next to player 
+				attack player 
+				add msg to msg vector 
+		if its not goblin 
+			call movemost
+
+void Dungeon:: moveMonst(Actor* monster){
+//Is pseudocode 
+	msg is empty string 
+	if monster is awake 
+		if the monster is within smell distance 
+			if its not next to player
+				call movecloser 
+			else 
+				attack 
+				add msg to msg vector 
+		if its next to player (it means its dragon)
+			attack 
+			add msg to msg vector 
+	if monster is asleep 
+		decrease sleep turn 
+		if sleep turn is 0 wake it up 
+
+bool moveCloser(Actor *monster){
+//is not pseudocode 
+	move to right, left, up or down to make the distance between player and monster shorter 
+
+
+
+void Dungeon:: attack(attacker, defender, msg)
+//is pseudoode 
+	calculate attackioints 
+	calculate defender points 
+	calculate dmg points 
+	if attacker hits defender 
+		set msg to attacker and action string msg 
+		decrease hp of defender 
+		if the attacker weapon was magic fangs of sleep 
+			set defender to sleep 
+			set msg to one for defender sleep 
+		if defender health is less than zero 
+			set msg to final blow 
+			if the defender was player 
+				game over 
+			if it was monster 
+				if drop item is true 
+					set location of drop item of monster to monster position 
+				if theres nothing else on it 
+					drop item 
+					push back drop item in glist 
+
+				delete the monster 
+	if attacker missed diffender 
+		set msg to misses. 
+		 
+void Dungeon:: pickUpObjects(){
+	set w to nullptr 
+	if canPickUp is true 
+		if inventory size is 26 
+			print u can’t pick that up 
+		else 
+			add w to inventory 
+			if w is scroll 
+				print u pick up scroll 
+			if w is weapon
+				print u pick up weapon 
+			erase w from glist 
+	if level is 4 
+		if player picks up golden idol 
+			print msg 
+			set run to false 
+
+bool Dungeon:: canPickUp(GameObjects* &w, int &indexGlist)
+	if player is not null 
+		for glist size 
+			if item pos is equal to player pos 
+			w is glist at the pos 
+			set index to the index of item in glist 
+			return true 
+	return false 
+
+void Dungeon:: yieldWeaponOrScroll(char a){
+	string msg is empty 
+	clearscreen 
+	char ch is a 
+	for inventory size 
+		print items in inventory 
+	set choose weapon get character
+	set inventory index choose weapon - 97
+	if inventory index is less than inventory size 
+		if a is w 
+			if its weapon 
+				set m_players weapon to weapon 
+				set msg 
+			if its scroll 
+				msg is you cant wield 
+		if a is r 
+			if its weapon 
+				msg is u cant read 
+			if its scroll 
+				if its scroll of armor 
+					increase players armor 
+					set armor msg 
+				if its scroll of dex
+					increase players dex
+					set dex msg
+				if its scroll of strength 
+					increase players strength 
+					set str msg 
+				if its scroll of health 
+					increase players health 
+					set str msg 
+				if scroll of teleportation 
+					find random coord and teleport there 
+					set teleport msg 
+			delete inventory msg 
+				else
+					u cant read 
+
+	clear screen, display, print msg 
+
+void Dungeon playGame(game g, char command)
+	if players health is less than max health 
+		1 in 10 chance of healing players hp by 1 
+	if command is q 
+		set run false 
+	if command is w or r 
+		yield weapon or scroll 
+	if g 
+		pick up objects
+		if run is false 
+			set run false 
+	if > 
+		descend 
+	if i 
+		display inventory 
+	if c 
+		cheat
+	if movement char 
+		move characters
+		mov monsters
+			if run is false 
+				set run false 
+				clearscreen 
+				display 
+				print 
+	default 
+		clear screen
+		display 
+		print msg 
+
+void Dungeon:: display inventory 
+	string msg is empty 
+	clear screen 
+	ch is a 
+	print inventory 
+	getchar 
+	clear screen 
+	display 
+
+
+void Dungeon:: descend(){
+	if players at staircase 
+		increase level 
+		delete monsters
+		delete items on floor 
+		generate 
+		add player 
+		display
+
+
+void Dungeon setToSleep
+	set makeSleep 1 to 5 
+	set sleep for 2 to 6 
+	if makesleep is 1 
+		if defender is sleep 
+			new sleep time is max of current sleep and new sleep turn 
+		else is awake 
+			make defender sleep 
+
+
+	
+-a list of any known bugs, features not implemented, or serious inefficiencies.
+	The goblin movement is not accurate, but it uses recursion. 
+	
+
+
+	
+

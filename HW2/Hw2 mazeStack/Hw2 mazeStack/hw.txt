@@ -1,0 +1,30 @@
+Problem 1: Stack
+3 , 5
+3 , 6
+3 , 4
+2 , 4
+1 , 4
+1 , 3
+1 , 2
+1 , 1
+2 , 1
+3 , 3
+4 , 5
+5 , 5
+
+Problem 4: Queue
+3 , 5
+4 , 5
+3 , 4
+3 , 6
+5 , 5
+3 , 3
+2 , 4
+6 , 5
+5 , 4
+1 , 4
+7 , 5
+5 , 3
+
+How do the two algorithms differ from each other? (Hint: how and why do they visit cells in the maze in a different order?)
+	In algorithm that was impletemented by using stack, it prioritizes expansion in direction that the coordinate was last added. For instance, the if statements were in the order of SOUTH, WEST, NORTH, EAST, so if there were no walls, it looks at the top element which is EAST, and checks 4 directions of the coordinate that was originally at EAST of the initial node. This is because stack checks item that was last added. On the other hand, the algorithm that uses queue looks at the item that's first added to the queue, so it leaves elements added later behind and keeps searching the earlier element until its stuck. 

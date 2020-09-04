@@ -1,0 +1,8 @@
+2. It doesn't work because unlike string and int, it doesn't know how to handle the == sign because it was never defined 
+
+3a. O(N^3) because there are three for loops that iterates from 0 to N. 
+3b. O(N^3) because we are ignoring constant proportionality. However it is taking less steps for inner loop that iterates to i. 
+
+4a. O(N^2) because the for loop is iterating N times and also Insert takes N-N+1 steps 
+4b. O(NlogN), because sorting will take the longest step 
+4c. O(N), because every part has time complexity of O(N)
